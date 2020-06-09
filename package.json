@@ -1,0 +1,24 @@
+{
+  "name": "mqtt-example",
+  "version": "1.0.0",
+  "description": "Simple MQTT example developed using nodejs",
+  "main": "index.js",
+  "dependencies": {
+    "child_process": "^1.0.2",
+    "fs": "^0.0.1-security"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shuzhiwen/mqtt-example.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shuzhiwen/mqtt-example/issues"
+  },
+  "homepage": "https://github.com/shuzhiwen/mqtt-example#readme"
+}
