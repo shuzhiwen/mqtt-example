@@ -3,15 +3,17 @@ const {
   exec
 } = require('child_process');
 
-//接收来自终端设备的 MQTT 订阅
+const subTopic = "uploadToServer";
+const pubTopic = "downloadFromServer";
+
+//订阅来自终端设备的 MQTT 消息
 setTimeout(() => {
-  exec(`nohup mosquitto_sub -t uploadToServer > data.txt 2>&1 &`, (error, stdout, stderr) => {
+  exec(`nohup mosquitto_sub -t ${subTopic} > data.txt 2>&1 &`, (error) => {
     if (error) {
       console.error(`error: ${error}`);
       return;
     } else {
-      console.log(`stdout: ${stdout}`);
-      console.error(`stderr: ${stderr}`);
+      console.log(`Subscribe Topic: ${subTopic}`);
     }
   });
 }, 0);
@@ -25,16 +27,18 @@ setInterval(() => {
       console.log(`error: ${error.message}`);
       return;
     }
-    data = data.split('\n');
-    exec(`mosquitto_pub -t downloadFromServer -m "${data[data.length - 1]}"`,
-      (error, stdout, stderr) => {
-        if (error) {
-          console.error(`error: ${error}`);
-          return;
-        } else {
-          console.log(`stdout: ${stdout}`);
-          console.error(`stderr: ${stderr}`);
-        }
-      });
+
+    //解析文本数据，获取最后（最新）的一行
+    let dataArr = data.split('\n');
+    let msg = dataArr[dataArr.length - 1];
+
+    exec(`mosquitto_pub -t ${pubTopic} -m "${msg}"`, (error) => {
+      if (error) {
+        console.error(`error: ${error}`);
+        return;
+      } else {
+        console.log(`Publish Topic: ${msg}`);
+      }
+    });
   });
 }, 1000);
