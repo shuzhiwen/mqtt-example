@@ -10,7 +10,7 @@ const pubTopic = "downloadFromServer";
 setTimeout(() => {
   exec(`nohup mosquitto_sub -t ${subTopic} > data.txt 2>&1 &`, (error) => {
     if (error) {
-      console.error(`error: ${error}`);
+      console.error(`Subscribe: ${error}`);
       return;
     } else {
       console.log(`Subscribe Topic: ${subTopic}`);
@@ -34,7 +34,7 @@ setInterval(() => {
 
     exec(`mosquitto_pub -t ${pubTopic} -m "${msg}"`, (error) => {
       if (error) {
-        console.error(`error: ${error}`);
+        console.error(`Publish: ${error}`);
         return;
       } else {
         console.log(`Publish Topic: ${msg}`);
