@@ -1,13 +1,18 @@
 import React from 'react';
+import AddTodo from './containers/AddTodo';
+import VisibleTodoList from './containers/VisibleTodoList';
+import Footer from './components/Footer';
 import './App.css';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
+        <div>
+          <AddTodo />
+          <VisibleTodoList />
+          <Footer />
+        </div>
       </header>
     </div>
   );
