@@ -4,7 +4,7 @@ import {
   REQUEST_POSTS,
   SELECT_SUBREDDIT,
   INVALIDATE_SUBREDDIT
-} from '../actions';
+} from './actions';
 
 const selectSubreddit = (
   state = 'react.js',

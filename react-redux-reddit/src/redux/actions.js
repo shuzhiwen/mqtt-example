@@ -1,22 +1,23 @@
-// const demoState = {
-//   selectedSubreddit: 'frontend',
-//   postsBySubreddit: {
-//     frontend: {
-//       isFetching: true,
-//       didInvalidate: false,
-//       items: []
-//     },
-//     reactjs: {
-//       isFetching: false,
-//       didInvalidate: false,
-//       lastUpdated: 1439478405547,
-//       items: [{
-//         id: 42,
-//         title: 'Confusion about Flux and Relay'
-//       }]
-//     }
-//   }
-// }
+//state结构模板
+export const demoState = {
+  selectedSubreddit: 'frontend',
+  postsBySubreddit: {
+    frontend: {
+      isFetching: true,
+      didInvalidate: false,
+      items: []
+    },
+    reactjs: {
+      isFetching: false,
+      didInvalidate: false,
+      lastUpdated: 1439478405547,
+      items: [{
+        id: 42,
+        title: 'Confusion about Flux and Relay'
+      }]
+    }
+  }
+}
 
 export const REQUEST_POSTS = 'REQUEST_POSTS';
 export const RECEIVE_POSTS = 'RECEIVE_POSTS';
