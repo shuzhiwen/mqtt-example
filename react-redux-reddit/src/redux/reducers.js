@@ -6,7 +6,7 @@ import {
   INVALIDATE_SUBREDDIT
 } from './actions';
 
-const selectSubreddit = (
+const selectedSubreddit = (
   state = 'reactjs',
   action
 ) => {
@@ -64,6 +64,6 @@ const postsBySubreddit = (state = {}, action) => {
 
 //Reducers的命名需要和state中的名字保持一致（顶层）
 export default combineReducers({
-  selectSubreddit,
+  selectedSubreddit,
   postsBySubreddit
 });
