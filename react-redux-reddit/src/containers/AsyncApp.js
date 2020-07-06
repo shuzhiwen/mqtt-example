@@ -71,6 +71,7 @@ AsyncApp.propTypes = {
   dispatch: PropTypes.func.isRequired
 }
 
+//初始化时会根据Reducer定义的默认值进行映射
 function mapStateToProps(state) {
   const { selectedSubreddit, postsBySubreddit } = state;
   const { isFetching, lastUpdated, items: posts } = postsBySubreddit[
