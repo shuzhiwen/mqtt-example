@@ -49,7 +49,7 @@ const posts = (
 }
 
 //将Reducer进行拆分，细化Reducer管理
-const postBySubreddit = (state = {}, action) => {
+const postsBySubreddit = (state = {}, action) => {
   switch (action.type) {
     case INVALIDATE_SUBREDDIT:
     case REQUEST_POSTS:
@@ -65,5 +65,5 @@ const postBySubreddit = (state = {}, action) => {
 //Reducers的命名需要和state中的名字保持一致（顶层）
 export default combineReducers(
   selectSubreddit,
-  postBySubreddit
+  postsBySubreddit
 );
