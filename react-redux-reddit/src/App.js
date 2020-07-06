@@ -1,7 +1,4 @@
 import React from 'react';
-import AddTodo from './containers/AddTodo';
-import VisibleTodoList from './containers/VisibleTodoList';
-import Footer from './components/Footer';
 import './App.css';
 
 function App() {
@@ -9,9 +6,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         <div>
-          <AddTodo />
-          <VisibleTodoList />
-          <Footer />
+          hello
         </div>
       </header>
     </div>
