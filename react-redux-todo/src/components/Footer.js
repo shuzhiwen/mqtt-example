@@ -1,6 +1,6 @@
 import React from 'react';
 import FilterLink from '../containers/FilterLink';
-import { visibilityFilters } from '../actions';
+import { visibilityFilters } from '../redux/actions';
 
 const Footer = () => (
   <div>
