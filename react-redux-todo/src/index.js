@@ -6,8 +6,7 @@ import App from './App';
 import './index.css';
 
 const store = configStore();
-
-ReactDOM.render(
+const renderApp = () => ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <App />
@@ -15,3 +14,10 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById('root')
 );
+
+//启动热加载，仅在开发模式
+if (process.env.NODE_ENV !== 'production' && module.hot) {
+  module.hot.accept('./App', renderApp);
+}
+
+renderApp();
