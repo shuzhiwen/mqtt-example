@@ -25,12 +25,17 @@ class App extends React.Component {
       setAge: action
     });
 
-    //对state改变作出响应
-    autorun(() => console.log(this.person.labelText));
+    const message = observable({
+      title: 'hello',
+      likes: ['Nemo']
+    });
 
-    //改变state
-    this.person.setAge(50);
-    setTimeout(() => this.person.name = 'Dave', 1000);
+    //autorun(() => console.log(message.title));
+    message.title = 'hello world';
+
+    autorun(() => console.log(message.likes.join(', ')));
+    message.likes.push("Jennifer");
+    message.likes[2] = 'Daming';
   }
 
   render() {
