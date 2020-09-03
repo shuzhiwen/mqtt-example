@@ -1,0 +1,14 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-image: linear-gradient(to top, #209cff 0%, #68e0cf 100%);
+}
+
+#info {
+  position: absolute;
+  top: 10px;
+  width: 100%;
+  text-align: center;
+  display: block;
+  color: white;
+}
