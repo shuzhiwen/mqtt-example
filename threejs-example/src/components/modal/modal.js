@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import Event from '../event';
-import { logistic, increment } from '../../common/math';
+import { interpolate, increment } from '../../common/math';
 
 class Create {
   constructor() {
@@ -45,16 +45,13 @@ class Create {
   //绘制时间轴
   drawTimeLine = ({ start, end, distance = 200 }) => {
     for (let index = start; index <= end; index++) {
-      //创建平面和纹理
-      const geometry = new THREE.PlaneGeometry(100, 100);
-      const material = new THREE.MeshBasicMaterial({
-        map: new THREE.CanvasTexture(this.makeTextCanvas({ text: index }))
+      //创建对象和纹理
+      const { object, material } = this.drawTexts({
+        x: 0,
+        y: 0,
+        z: distance * (index - start),
+        text: index
       });
-
-      //创建新的对象用于展示年份
-      const object = new THREE.Mesh(geometry, material);
-      object.position.set(0, 0, distance * (index - start));
-      material.opacity = 0.5;
 
       //透明度控制函数
       const transparencyControl = () => {
@@ -66,6 +63,8 @@ class Create {
         }
       };
 
+      //初始文字透明度
+      material.opacity = 0.5;
       //注册函数
       this.opacityEvent.registerEvent(transparencyControl, index);
       //添加对象
@@ -73,30 +72,43 @@ class Create {
     }
   };
 
+  //绘制时间轴上的文字
+  drawTexts = ({ text, x, y, z }) => {
+    //创建平面和纹理
+    const geometry = new THREE.PlaneGeometry(100, 100);
+    const material = new THREE.MeshBasicMaterial({
+      map: new THREE.CanvasTexture(this.makeTextCanvas({ text: text }))
+    });
+
+    //创建新的对象用于展示文字
+    const object = new THREE.Mesh(geometry, material);
+    object.position.set(x, y, z);
+
+    return { object, material };
+  };
+
   //设置相机坐标位置，由滚动事件控制
   bindScroll = ({ distance = 20, x, y, z }) => {
-    if (typeof distance === 'number') {
-      document.body.onmousewheel = (e) => {
-        //动画持续时间
-        const duration = 100;
-        //插值数量
-        const number = distance;
-        //插值数值数组
-        const distances = logistic({ start: 0, end: distance, number: number });
-        //增量数值数组
-        const increments = increment(distances);
+    document.body.onmousewheel = (e) => {
+      //动画持续时间
+      const duration = 500;
+      //插值数量
+      const number = distance;
+      //插值数值数组
+      const distances = interpolate({ start: 0, end: distance, number: number });
+      //增量数值数组
+      const increments = increment(distances);
 
-        increments.forEach((displacement, index) => {
-          setTimeout(() => {
-            x && (this.camera.position.x += e.wheelDelta > 0 ? displacement : -displacement);
-            y && (this.camera.position.y += e.wheelDelta > 0 ? displacement : -displacement);
-            z && (this.camera.position.z += e.wheelDelta > 0 ? displacement : -displacement);
-            //触发注册的函数
-            this.opacityEvent.fireAllEvents();
-          }, duration / number * index);
-        });
-      };
-    }
+      increments.forEach((displacement, index) => {
+        setTimeout(() => {
+          x && (this.camera.position.x += e.wheelDelta > 0 ? displacement : -displacement);
+          y && (this.camera.position.y += e.wheelDelta > 0 ? displacement : -displacement);
+          z && (this.camera.position.z += e.wheelDelta > 0 ? displacement : -displacement);
+          //触发注册的函数
+          this.opacityEvent.fireAllEvents();
+        }, duration / number * index);
+      });
+    };
   };
 
   //设置相机视角，由鼠标位置控制

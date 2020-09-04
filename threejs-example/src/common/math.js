@@ -1,11 +1,17 @@
-//逻辑斯蒂函数变化曲线（近似）
-export function logistic({ start, end, number }) {
-  const min = -10;
-  const max = 10;
+//缓动函数
+const easings = {
+  linear: (percentage) => percentage,
+  'ease-in': (percentage) => percentage ** 2,
+  'ease-out': (percentage) => -1 * percentage ** 2 + 2 * percentage,
+  'ease-in-out': (percentage) => 1 / (1 + Math.E ** -(-100 + percentage * 200))
+};
+
+//插值函数变化曲线（近似）
+export function interpolate({ start, end, number, type = 'ease-out' }) {
   const numbers = new Array(0);
   const distance = end - start;
   const step = distance / number;
-  const compute = (percentage) => 1 / (1 + Math.E ** -(min + percentage * (max - min)));
+  const compute = easings[type];
 
   for (let i = start; start < end ? i <= end : i >= end; i += step) {
     const percentage = (i - start) / distance;
