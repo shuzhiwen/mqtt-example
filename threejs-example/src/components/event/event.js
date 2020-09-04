@@ -1,6 +1,6 @@
 class Event {
   constructor() {
-    this.events = new Array();
+    this.events = new Array(0);
   }
 
   registerEvent = (event, id = Math.random().toString()) => {
@@ -9,13 +9,13 @@ class Event {
     }
   };
 
-  fireEvents = () => {
+  fireAllEvents = () => {
     for (const index in this.events) {
-      this.events[index].event();
+      this.events[index] && this.events[index].event();
     }
   };
 
-  removeEvent = (id) => {
+  unRegisterEvent = (id) => {
     const index = this.events.findIndex((eventObject) => eventObject.id === id);
     if (index >= 0) {
       delete this.events[index];

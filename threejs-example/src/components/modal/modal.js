@@ -5,7 +5,7 @@ import { logistic, increment } from '../../common/math';
 class Create {
   constructor() {
     //事件注册，指定每帧会调用的函数
-    this.event = new Event();
+    this.opacityEvent = new Event();
 
     //新建相机
     this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 10, 2000);
@@ -67,17 +67,23 @@ class Create {
       };
 
       //注册函数
-      this.event.registerEvent(transparencyControl, index);
+      this.opacityEvent.registerEvent(transparencyControl, index);
       //添加对象
       this.scene.add(object);
     }
   };
 
   //设置相机坐标位置，由滚动事件控制
-  bindScroll = ({ distance, x, y, z }) => {
+  bindScroll = ({ distance = 20, x, y, z }) => {
     if (typeof distance === 'number') {
       document.body.onmousewheel = (e) => {
-        const distances = logistic({ start: 0, end: distance, step: distance / 20 });
+        //动画持续时间
+        const duration = 100;
+        //插值数量
+        const number = distance;
+        //插值数值数组
+        const distances = logistic({ start: 0, end: distance, number: number });
+        //增量数值数组
         const increments = increment(distances);
 
         increments.forEach((displacement, index) => {
@@ -85,7 +91,9 @@ class Create {
             x && (this.camera.position.x += e.wheelDelta > 0 ? displacement : -displacement);
             y && (this.camera.position.y += e.wheelDelta > 0 ? displacement : -displacement);
             z && (this.camera.position.z += e.wheelDelta > 0 ? displacement : -displacement);
-          }, 20 * index);
+            //触发注册的函数
+            this.opacityEvent.fireAllEvents();
+          }, duration / number * index);
         });
       };
     }
@@ -98,7 +106,13 @@ class Create {
       const { clientWidth, clientHeight } = document.body;
       const offsetX = (clientX - clientWidth / 2) / (clientWidth / 2);
       const offsetY = (clientY - clientHeight / 2) / (clientHeight / 2);
-      this.camera.lookAt(offsetX * angle, -offsetY * angle, this.camera.position.z - 100);
+
+      //相机将要移动的视角
+      const x = offsetX * angle;
+      const y = -offsetY * angle;
+      const z = this.camera.position.z - 100;
+
+      this.camera.lookAt(x, y, z);
     };
   };
 
@@ -106,8 +120,6 @@ class Create {
   animate = (extraAnimate) => {
     //额外的变换
     typeof extraAnimate === 'function' && extraAnimate();
-    //触发注册的函数
-    this.event.fireEvents();
     //渲染下一帧
     this.renderer.render(this.scene, this.camera);
     //下次绘制前调用此函数
