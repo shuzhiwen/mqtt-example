@@ -8,14 +8,14 @@ class Create {
     this.opacityEvent = new Event();
 
     //新建相机
-    this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 10, 2000);
+    this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 10, 1000);
     //移动相机坐标，防止和对象重叠
     this.camera.position.set(0, 0, 100);
     //相机视角
     this.camera.lookAt(0, 0, 0);
 
     //新建渲染器
-    this.renderer = new THREE.WebGLRenderer({ alpha: true });
+    this.renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     //设置渲染器大小
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     //添加dom元素
@@ -25,6 +25,7 @@ class Create {
     this.scene = new THREE.Scene();
   }
 
+  //创建文字画布用于材质
   makeTextCanvas = ({ text, size = 50, width = 200, height = 200, color = '#000000', background = '#00000000' }) => {
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
@@ -73,11 +74,12 @@ class Create {
   };
 
   //绘制时间轴上的文字
-  drawTexts = ({ text, x, y, z }) => {
+  drawTexts = ({ x, y, z, text, size, width, height, color, background }) => {
     //创建平面和纹理
     const geometry = new THREE.PlaneGeometry(100, 100);
     const material = new THREE.MeshBasicMaterial({
-      map: new THREE.CanvasTexture(this.makeTextCanvas({ text: text }))
+      map: new THREE.CanvasTexture(this.makeTextCanvas({ text, size, width, height, color, background })),
+      transparent: true
     });
 
     //创建新的对象用于展示文字
@@ -112,7 +114,7 @@ class Create {
   };
 
   //设置相机视角，由鼠标位置控制
-  bindMouse = (angle = 30) => {
+  bindMouse = ({ angle = 30 }) => {
     document.body.onmousemove = (e) => {
       const { clientX, clientY } = e;
       const { clientWidth, clientHeight } = document.body;
