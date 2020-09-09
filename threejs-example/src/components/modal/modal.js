@@ -30,7 +30,8 @@ class Create {
       //创建对象和纹理
       const { object, material } = this.drawTexts({
         position: new THREE.Vector3(0, 0, distance * (index - start)),
-        text: index
+        text: index,
+        name: 'timeLine'
       });
 
       //透明度控制函数
@@ -103,8 +104,10 @@ class Create {
     document.body.onclick = () => {
       //通过摄像机和鼠标位置更新射线
       raycaster.setFromCamera(mouse, this.camera);
-      //计算相交的点
-      const intersects = raycaster.intersectObjects(this.scene.children);
+      //计算相交的点，过滤时间轴物体
+      const intersects = raycaster
+        .intersectObjects(this.scene.children)
+        .filter((intersect) => intersect.object.name !== 'timeLine');
       //控制物体移动
       if (intersects.length !== 0 && intersects[0]) {
         const originObject = activeObject;
