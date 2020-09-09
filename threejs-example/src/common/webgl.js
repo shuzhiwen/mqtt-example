@@ -60,7 +60,6 @@ const WEBGL = {
     }
 
     message = message.replace('$1', names[version]);
-
     element.innerHTML = message;
 
     return element;
