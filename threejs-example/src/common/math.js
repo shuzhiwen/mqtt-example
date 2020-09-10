@@ -1,4 +1,4 @@
-//缓动函数
+// 缓动函数
 const easings = {
   linear: (percentage) => percentage,
   'ease-in': (percentage) => percentage ** 2,
@@ -14,6 +14,7 @@ const easings = {
  * @param {type} 缓动函数类型
  * @return {numbers} 插值数据
  */
+
 export function interpolate({ start, end, number, type = 'ease-out' }) {
   const numbers = new Array(0);
   const distance = end - start;
@@ -41,6 +42,7 @@ export function interpolate({ start, end, number, type = 'ease-out' }) {
  * @param {array} 一组散点数值
  * @return {array} 一组增量数值
  */
+
 export function increment(array) {
   return array.map((number, index) => {
     if (index === 0) {

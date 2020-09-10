@@ -7,6 +7,7 @@ import { interpolate } from './math';
  * @param {duration} 从出发地到目的地的时间 
  * @param {moveFunction} 移动位置的回调函数，接收一个三维坐标的对象为参数
  */
+
 export function move({ departure, destination, duration, moveFunction }) {
   const frameNumber = 60;
   const interpolateNumber = duration / 1000 * frameNumber;
