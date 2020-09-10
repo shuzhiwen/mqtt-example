@@ -1,6 +1,6 @@
 import React from 'react';
 import { WEBGL } from './common/webgl';
-import { data } from './data/news.json';
+import { texts, images } from './data/news.json';
 import Modal, { Creator } from './components/modal';
 import './app.css';
 
@@ -11,8 +11,8 @@ export default function App() {
   modal.bindScroll({ distance: 20, z: true });
   modal.drawTimeLine({ start: 2000, end: 2020, distance: 300 });
 
-  // 将数据绘制成文字
-  data.forEach(({ year, month, news }) => {
+  // 添加文字
+  texts.forEach(({ year, month, news }) => {
     const xRange = [ -100, 100 ];
     const yRange = [ -100, 100 ];
     const x = xRange[Math.round(Math.random())];
@@ -26,6 +26,25 @@ export default function App() {
       size: 10,
       width: 200,
       height: 100
+    });
+
+    modal.scene.add(object);
+  });
+
+  // 添加图片
+  images.forEach(({ year, month, source }) => {
+    const xRange = [ -100, 100 ];
+    const yRange = [ -100, 100 ];
+    const x = xRange[Math.round(Math.random())];
+    const y = yRange[Math.round(Math.random())];
+    const z = (year + month / 12 - 2000) * 300;
+
+    // 创建一个文字对象
+    const { object } = Creator.createImage({
+      position: { x, y, z },
+      source: require(`${source}`),
+      width: 200,
+      height: 200
     });
 
     modal.scene.add(object);

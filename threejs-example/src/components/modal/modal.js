@@ -53,7 +53,7 @@ class Create {
     }
   };
 
-  //设置相机坐标位置，由滚动事件控制
+  // 设置相机坐标位置，由滚动事件控制
   bindScroll = ({ distance = 20, x, y, z }) => {
     document.body.onmousewheel = (e) => {
       // 动画持续时间

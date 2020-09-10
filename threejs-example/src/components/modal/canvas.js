@@ -41,6 +41,7 @@ export const makeImageCanvas = ({ source = '', width = 200, height = 200, depth 
   const devicePixelRatio = window.devicePixelRatio || 1;
   const backingStoreRatio = ctx.webkitBackingStorePixelRatio || 1;
   const ratio = depth || devicePixelRatio / backingStoreRatio;
+  const image = new Image();
 
   // 将 canvas 的宽高设置成容器宽高的 2 倍
   canvas.width = width * ratio;
@@ -51,7 +52,8 @@ export const makeImageCanvas = ({ source = '', width = 200, height = 200, depth 
   // 放大图像
   ctx.scale(ratio, ratio);
   // 设置图片
-  ctx.drawImage(source, 0, 0, width, height);
+  image.onload = () => ctx.drawImage(image, 0, 0, width, height);
+  image.src = source;
 
   return canvas;
 };
