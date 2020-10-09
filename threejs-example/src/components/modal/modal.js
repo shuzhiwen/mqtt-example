@@ -30,6 +30,7 @@ class Create {
       // 创建对象和纹理
       const { object, material } = createText({
         position: new THREE.Vector3(0, 0, distance * (index - start)),
+        rotation: { x: 0, y: 0, z: 0 },
         text: index,
         name: 'timeLine'
       });
