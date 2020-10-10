@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import Event from '../event';
 import { interpolate, increment } from '../../common/math';
-import { move, rotate } from '../../common/animation';
+import { change3D } from '../../common/animation';
 import { createText } from './creator';
 
 class Create {
@@ -101,21 +101,21 @@ class Create {
         const duration = 1000;
 
         // 原来的激活对象返回到原位置
-        if (originObject !== null && !originObject.isMoving) {
+        if (originObject !== null) {
           // 重置激活的对象
           if (targetObject === originObject) activeObject = null;
           // 标记运动状态
           originObject.isMoving = true;
           setTimeout(() => (originObject.isMoving = false), duration);
           // 开始移动对象
-          move({
+          change3D({
             duration,
             start: originObject.position,
             end: originPosition,
             callback: (position) => originObject.position.set(position.x, position.y, position.z)
           });
           // 改变对象角度
-          rotate({
+          change3D({
             duration,
             start: originObject.rotation,
             end: originRotation,
@@ -133,14 +133,14 @@ class Create {
           targetObject.isMoving = true;
           setTimeout(() => (targetObject.isMoving = false), duration);
           // 开始移动对象
-          move({
+          change3D({
             duration,
             start: targetPosition,
             end: { x: 0, y: 0, z: this.camera.position.z - 50 },
             callback: (position) => targetObject.position.set(position.x, position.y, position.z)
           });
           // 改变对象角度
-          rotate({
+          change3D({
             duration,
             start: targetRotation,
             end: { x: 0, y: 0, z: 0 },
@@ -151,18 +151,13 @@ class Create {
     };
 
     document.body.onmousemove = (e) => {
-      const { clientX, clientY } = e;
-      const { clientWidth, clientHeight } = document.body;
-      const offsetX = (clientX - clientWidth / 2) / (clientWidth / 2);
-      const offsetY = (clientY - clientHeight / 2) / (clientHeight / 2);
-
       // 鼠标位置转换为设备坐标，范围是（-1，1）
       mouse.x = e.clientX / window.innerWidth * 2 - 1;
       mouse.y = e.clientY / window.innerHeight * -2 + 1;
 
       // 相机将要移动的视角
-      const x = offsetX * angle;
-      const y = -offsetY * angle;
+      const x = mouse.x * angle;
+      const y = mouse.y * angle;
       const z = this.camera.position.z - 100;
 
       this.camera.lookAt(x, y, z);
