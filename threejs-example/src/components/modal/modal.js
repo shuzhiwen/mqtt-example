@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import Event from '../event';
 import { interpolate, increment } from '../../common/math';
-import { move } from '../../common/animation';
+import { move, rotate } from '../../common/animation';
 import { createText } from './creator';
 
 class Create {
@@ -31,24 +31,21 @@ class Create {
       const { object, material } = createText({
         position: new THREE.Vector3(0, 0, distance * (index - start)),
         rotation: { x: 0, y: 0, z: 0 },
-        text: index,
-        name: 'timeLine'
+        name: 'timeLine',
+        text: index
       });
-
-      // 透明度控制函数
-      const transparencyControl = () => {
+      // 初始文字透明度
+      material.opacity = 0.5;
+      // 注册透明度控制函数
+      this.opacityEvent.registerEvent(() => {
         const spacingZ = Math.abs(this.camera.position.z - object.position.z);
+        // 根据和相机的距离设置透明度
         if (spacingZ < distance / 3) {
           material.opacity = (spacingZ - 20) / distance;
         } else if (spacingZ > distance * 2 / 3) {
           material.opacity = (distance - spacingZ) / distance;
         }
-      };
-
-      // 初始文字透明度
-      material.opacity = 0.5;
-      // 注册函数
-      this.opacityEvent.registerEvent(transparencyControl, index);
+      }, index);
       // 添加对象
       this.scene.add(object);
     }
@@ -84,6 +81,7 @@ class Create {
     const mouse = new THREE.Vector2(0, 0);
     let activeObject = null;
     let activePosition = new THREE.Vector3();
+    let activeRotation = new THREE.Vector3();
 
     document.body.onclick = () => {
       // 通过摄像机和鼠标位置更新射线
@@ -96,8 +94,10 @@ class Create {
       if (intersects.length !== 0 && intersects[0]) {
         const originObject = activeObject;
         const originPosition = new THREE.Vector3(activePosition.x, activePosition.y, activePosition.z);
+        const originRotation = new THREE.Vector3(activeRotation.x, activeRotation.y, activeRotation.z);
         const targetObject = intersects[0].object;
         const targetPosition = targetObject.position;
+        const targetRotation = targetObject.rotation;
         const duration = 1000;
 
         // 原来的激活对象返回到原位置
@@ -109,10 +109,17 @@ class Create {
           setTimeout(() => (originObject.isMoving = false), duration);
           // 开始移动对象
           move({
-            departure: originObject.position,
-            destination: originPosition,
-            duration: duration,
-            moveFunction: (position) => originObject.position.set(position.x, position.y, position.z)
+            duration,
+            start: originObject.position,
+            end: originPosition,
+            callback: (position) => originObject.position.set(position.x, position.y, position.z)
+          });
+          // 改变对象角度
+          rotate({
+            duration,
+            start: originObject.rotation,
+            end: originRotation,
+            callback: (rotation) => originObject.rotation.set(rotation.x, rotation.y, rotation.z)
           });
         }
 
@@ -121,15 +128,23 @@ class Create {
           // 设置新坐标
           activeObject = targetObject;
           activePosition.set(targetPosition.x, targetPosition.y, targetPosition.z);
+          activeRotation.set(targetRotation.x, targetRotation.y, targetRotation.z);
           // 标记运动状态
           targetObject.isMoving = true;
           setTimeout(() => (targetObject.isMoving = false), duration);
           // 开始移动对象
           move({
-            departure: targetPosition,
-            destination: { x: 0, y: 0, z: this.camera.position.z - 50 },
-            duration: duration,
-            moveFunction: (position) => targetObject.position.set(position.x, position.y, position.z)
+            duration,
+            start: targetPosition,
+            end: { x: 0, y: 0, z: this.camera.position.z - 50 },
+            callback: (position) => targetObject.position.set(position.x, position.y, position.z)
+          });
+          // 改变对象角度
+          rotate({
+            duration,
+            start: targetRotation,
+            end: { x: 0, y: 0, z: 0 },
+            callback: (rotation) => targetObject.rotation.set(rotation.x, rotation.y, rotation.z)
           });
         }
       }

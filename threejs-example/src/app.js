@@ -10,7 +10,6 @@ const modal = new Modal.Create();
 export default function App() {
   modal.bindMouse({ angle: 60 });
   modal.bindScroll({ distance: 20, z: true });
-  modal.scene.children.forEach((child) => modal.scene.remove(child));
   modal.drawTimeLine({ start: 2000, end: 2020, distance: 300 });
 
   // 约束随机坐标
@@ -23,12 +22,12 @@ export default function App() {
     const y = yRange[Math.round(Math.random())];
     const z = (year + month / 12 - 2000) * 300;
     const ray = new THREE.Vector3(x, y, 0);
-    const angleY = ray.angleTo(new THREE.Vector3(0, 1, 0)) / Math.PI * 180;
+    const angleY = ray.angleTo(new THREE.Vector3(0, 1, 0));
 
     // 创建一个文字对象
     const { object } = Creator.createText({
       position: { x, y, z },
-      rotation: { x: 0, y: Math.abs(angleY - 90) * (-x / Math.abs(x)), z: 0 },
+      rotation: { x: 0, y: Math.abs(angleY - Math.PI / 2) * (x > 0 ? -1 : 1), z: 0 },
       text: news,
       size: 20,
       width: 400,
@@ -44,12 +43,12 @@ export default function App() {
     const y = yRange[Math.round(Math.random())];
     const z = (year + month / 12 - 2000) * 300;
     const ray = new THREE.Vector3(x, y, 0);
-    const angleY = ray.angleTo(new THREE.Vector3(0, 1, 0)) / Math.PI * 180;
+    const angleY = ray.angleTo(new THREE.Vector3(0, 1, 0));
 
     // 创建一个图片对象
     const { object } = Creator.createImage({
       position: { x, y, z },
-      rotation: { x: 0, y: Math.abs(angleY - 90) * (-x / Math.abs(x)), z: 0 },
+      rotation: { x: 0, y: Math.abs(angleY - Math.PI / 2) * (x > 0 ? -1 : 1), z: 0 },
       source: require(`${source}`),
       width: 200,
       height: 200
