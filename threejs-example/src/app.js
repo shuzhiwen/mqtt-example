@@ -12,14 +12,15 @@ export default function App() {
   modal.bindScroll({ distance: 20, z: true });
   modal.drawTimeLine({ start: 2000, end: 2020, distance: 300 });
 
-  // 约束随机坐标
-  const xRange = [ -100, 100 ];
-  const yRange = [ -100, 100 ];
+  // 约束随机坐标范围
+  const [ base, length ] = [ 100, 100 ];
+  const xRange = new Array(length).fill(base).map((v, i) => (i < length / 2 ? v + i : -v - i + length / 2));
+  const yRange = new Array(length).fill(base).map((v, i) => (i < length / 2 ? v + i : -v - i + length / 2));
 
   // 添加文字
   texts.forEach(({ year, month, news }) => {
-    const x = xRange[Math.round(Math.random())];
-    const y = yRange[Math.round(Math.random())];
+    const x = xRange[Math.floor(Math.random() * 200)];
+    const y = yRange[Math.floor(Math.random() * 200)];
     const z = (year + month / 12 - 2000) * 300;
     const ray = new THREE.Vector3(x, y, 0);
     const angleY = ray.angleTo(new THREE.Vector3(0, 1, 0));
@@ -39,8 +40,8 @@ export default function App() {
 
   // 添加图片
   images.forEach(({ year, month, source }) => {
-    const x = xRange[Math.round(Math.random())];
-    const y = yRange[Math.round(Math.random())];
+    const x = xRange[Math.floor(Math.random() * 200)];
+    const y = yRange[Math.floor(Math.random() * 200)];
     const z = (year + month / 12 - 2000) * 300;
     const ray = new THREE.Vector3(x, y, 0);
     const angleY = ray.angleTo(new THREE.Vector3(0, 1, 0));

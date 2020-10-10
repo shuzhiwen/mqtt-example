@@ -35,14 +35,14 @@ class Create {
         text: index
       });
       // 初始文字透明度
-      material.opacity = 0.5;
+      material.opacity = 0.25;
       // 注册透明度控制函数
       this.opacityEvent.registerEvent(() => {
         const spacingZ = Math.abs(this.camera.position.z - object.position.z);
         // 根据和相机的距离设置透明度
-        if (spacingZ < distance / 3) {
-          material.opacity = (spacingZ - 20) / distance;
-        } else if (spacingZ > distance * 2 / 3) {
+        if (spacingZ < distance / 4) {
+          material.opacity = spacingZ / distance;
+        } else if (spacingZ > distance * 3 / 4) {
           material.opacity = (distance - spacingZ) / distance;
         }
       }, index);
