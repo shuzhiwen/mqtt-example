@@ -23,7 +23,7 @@ export default function App() {
   poetry.forEach(({ paragraphs }) => {
     const x = xRange[Math.floor(Math.random() * length)];
     const y = yRange[Math.floor(Math.random() * length)];
-    const z = Math.floor(Math.random() * (yearEnd - yearStart)) * yearDistance;
+    const z = Math.floor(Math.random() * (yearEnd - yearStart - 1)) * yearDistance;
     const ray = new THREE.Vector3(x, y, 0);
     const angleY = ray.angleTo(new THREE.Vector3(0, 1, 0));
 
@@ -72,8 +72,6 @@ export default function App() {
   return (
     <div className="container">
       <div id="stars" />
-      <div id="stars2" />
-      <div id="stars3" />
     </div>
   );
 }
