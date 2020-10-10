@@ -1,9 +1,8 @@
 // 缓动函数
-const easings = {
+export const easings = {
   linear: (percentage) => percentage,
   'ease-in': (percentage) => percentage ** 2,
-  'ease-out': (percentage) => -1 * percentage ** 2 + 2 * percentage,
-  'ease-in-out': (percentage) => 1 / (1 + Math.E ** -(-100 + percentage * 200))
+  'ease-out': (percentage) => -1 * percentage ** 2 + 2 * percentage
 };
 
 /**

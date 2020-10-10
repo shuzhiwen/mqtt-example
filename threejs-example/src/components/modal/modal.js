@@ -6,10 +6,13 @@ import { createText } from './creator';
 
 class Create {
   constructor() {
+    this.minCameraView = 10;
+    this.maxCameraView = 1000;
+    this.cameraAspect = window.innerWidth / window.innerHeight;
     // 事件注册，指定每帧会调用的函数
     this.opacityEvent = new Event();
     // 新建相机
-    this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 10, 1000);
+    this.camera = new THREE.PerspectiveCamera(75, this.cameraAspect, this.minCameraView, this.maxCameraView);
     // 移动相机坐标，防止和对象重叠
     this.camera.position.set(0, 0, 100);
     // 相机观察点
@@ -29,21 +32,21 @@ class Create {
     for (let index = start; index <= end; index++) {
       // 创建对象和纹理
       const { object, material } = createText({
-        position: new THREE.Vector3(0, 0, distance * (index - start)),
+        position: { x: 0, y: 0, z: distance * (index - start) },
         rotation: { x: 0, y: 0, z: 0 },
         name: 'timeLine',
         text: index
       });
       // 初始文字透明度
-      material.opacity = 0.25;
+      material.opacity = 0.1;
       // 注册透明度控制函数
       this.opacityEvent.registerEvent(() => {
-        const spacingZ = Math.abs(this.camera.position.z - object.position.z);
+        const spacing = Math.abs(this.camera.position.z - object.position.z);
         // 根据和相机的距离设置透明度
-        if (spacingZ < distance / 4) {
-          material.opacity = spacingZ / distance;
-        } else if (spacingZ > distance * 3 / 4) {
-          material.opacity = (distance - spacingZ) / distance;
+        if (spacing - this.minCameraView < distance / 5) {
+          material.opacity = (spacing - this.minCameraView) / distance - 0.1;
+        } else if (spacing > distance * 4 / 5) {
+          material.opacity = (distance - spacing) / distance - 0.1;
         }
       }, index);
       // 添加对象
@@ -53,6 +56,9 @@ class Create {
 
   // 设置相机坐标位置，由滚动事件控制
   bindScroll = ({ distance = 20, x, y, z }) => {
+    // 滚轮事件计数，用于叠加
+    let scrollCount = 0;
+
     document.body.onmousewheel = (e) => {
       // 动画持续时间
       const duration = 500;
@@ -61,8 +67,10 @@ class Create {
       // 插值数值数组
       const distances = interpolate({ start: 0, end: distance, number: number });
       // 增量数值数组
-      const increments = increment(distances);
+      let increments = increment(distances);
 
+      ++scrollCount;
+      increments = increments.map((item) => item * scrollCount);
       increments.forEach((displacement, index) => {
         setTimeout(() => {
           x && (this.camera.position.x += e.wheelDelta > 0 ? displacement : -displacement);
@@ -70,6 +78,8 @@ class Create {
           z && (this.camera.position.z += e.wheelDelta > 0 ? displacement : -displacement);
           // 触发注册的函数
           this.opacityEvent.fireAllEvents();
+          // 此次事件结束，取消叠加影响
+          if (index === increments.length - 1) --scrollCount;
         }, duration / number * index);
       });
     };
