@@ -1,0 +1,17 @@
+[
+    {
+        "path": "./data/cats/",
+        "baseName": "cats",
+        "amount": 14
+    },
+    {
+        "path": "./data/dogs/",
+        "baseName": "dogs",
+        "amount": 24
+    },
+    {
+        "path": "./data/pandas/",
+        "baseName": "pandas",
+        "amount": 17
+    }
+]

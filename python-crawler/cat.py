@@ -28,7 +28,7 @@ def fetch(url, dirname):
                 )  # 给图片命名
                 with open(image_path, "wb") as image_file:
                     image_file.write(image_data)  # 将图片写入文件
-                print("已下载 {} 张图片: {}".format(count, image))
+                print("已下载 {} 张 {} 图片: {}".format(count, dirname, image))
                 count += 1
             except:
                 print("图片下载失败: {}".format(image))
@@ -37,7 +37,8 @@ def fetch(url, dirname):
 if __name__ == "__main__":
     url1 = "https://image.baidu.com/search/index?&tn=baiduimage&word=%E6%A9%98%E7%8C%AB"
     url2 = "https://image.baidu.com/search/index?&tn=baiduimage&word=%E7%8B%97"
+    url3 = "https://image.baidu.com/search/index?&tn=baiduimage&word=%E5%A4%A7%E7%86%8A%E7%8C%AB"
 
-    print("开始爬取图片")
     fetch(url1, "cats")
     fetch(url2, "dogs")
+    fetch(url3, "pandas")
