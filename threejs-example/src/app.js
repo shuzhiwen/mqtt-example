@@ -17,13 +17,13 @@ export default function App() {
 
   modal.bindMouse({ angle: 60 });
   modal.bindScroll({ distance: 20, z: true });
-  modal.drawTimeLine({ start: yearStart, end: yearEnd, yearDistance });
+  modal.drawTimeLine({ start: yearStart, end: yearEnd, distance: yearDistance });
 
   // 添加文字
   poetries.forEach(({ paragraphs }) => {
     const x = xRange[Math.floor(Math.random() * length)];
     const y = yRange[Math.floor(Math.random() * length)];
-    const z = Math.floor(Math.random() * (yearEnd - yearStart - 1)) * yearDistance;
+    const z = Math.floor(Math.random() * (yearEnd - yearStart)) * yearDistance;
     const ray = new THREE.Vector3(x, y, 0);
     const angleY = ray.angleTo(new THREE.Vector3(0, 1, 0));
 
@@ -45,7 +45,7 @@ export default function App() {
     for (let i = 1; i <= amount; i++) {
       const x = xRange[Math.floor(Math.random() * length)];
       const y = yRange[Math.floor(Math.random() * length)];
-      const z = Math.floor(Math.random() * (yearEnd - yearStart - 1)) * yearDistance;
+      const z = Math.floor(Math.random() * (yearEnd - yearStart)) * yearDistance;
       const ray = new THREE.Vector3(x, y, 0);
       const angleY = ray.angleTo(new THREE.Vector3(0, 1, 0));
 

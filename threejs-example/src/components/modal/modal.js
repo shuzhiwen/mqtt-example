@@ -29,6 +29,7 @@ class Create {
 
   // 绘制时间轴
   drawTimeLine = ({ start, end, distance = 200 }) => {
+    this.camera.position.set(0, 0, (end - start + 1) * distance);
     for (let index = start; index <= end; index++) {
       // 创建对象和纹理
       const { object, material } = createText({
@@ -38,7 +39,7 @@ class Create {
         text: index
       });
       // 初始文字透明度
-      material.opacity = 0.1;
+      material.opacity = 0;
       // 注册透明度控制函数
       this.opacityEvent.registerEvent(() => {
         const spacing = Math.abs(this.camera.position.z - object.position.z);
